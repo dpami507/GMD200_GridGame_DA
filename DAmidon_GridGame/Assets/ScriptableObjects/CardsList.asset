@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759b6a68af6fdb441bf9815783cb9ac8, type: 3}
+  m_Name: CardsList
+  m_EditorClassIdentifier: 
+  cards:
+  - {fileID: 8228269396143461398, guid: bd661a993639a404aa28e19782155a20, type: 3}
+  - {fileID: 8228269396143461398, guid: 3c51888ae313ac341b42efe81a04371c, type: 3}
+  - {fileID: 8228269396143461398, guid: 9ea34936457af714e93e8a2cad09ad06, type: 3}
+  - {fileID: 8228269396143461398, guid: acd4d145abfe5ed4993a58199e71a526, type: 3}
+  - {fileID: 8228269396143461398, guid: 583cac41c927ef147abde4faa4481863, type: 3}
+  - {fileID: 8228269396143461398, guid: 5ab595def09c5094194f78b27a0843a7, type: 3}
