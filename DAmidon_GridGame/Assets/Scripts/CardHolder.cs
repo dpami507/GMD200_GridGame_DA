@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UIElements;
 
 public class CardHolder : MonoBehaviour
@@ -20,6 +21,7 @@ public class CardHolder : MonoBehaviour
     public float cardSpacing;
     public float hoverHeight;
     public float selectedCardsYOffset;
+    public float cardMoveSpeed;
 
     [Header("Cards Running")]
     public Transform indicatorArrow;
@@ -52,48 +54,48 @@ public class CardHolder : MonoBehaviour
             {
                 Collider2D clickedCard = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition)); //Pointcast
 
-                if (clickedCard != null) //If we actually click a card
+                if (clickedCard && clickedCard.GetComponent<CardScript>()) //If we actually click a card
                 {
                     //Swap
                     CardScript card = clickedCard.GetComponent<CardScript>();
-                    if (selectedCards.Contains(card))
+
+                    if(!card.destroyed)
                     {
-                        cards.Add(card);
-                        selectedCards.Remove(card);
-                    }
-                    else
-                    {
-                        cards.Remove(card);
-                        selectedCards.Add(card);
+                        if (selectedCards.Contains(card))
+                        {
+                            cards.Add(card);
+                            selectedCards.Remove(card);
+                        }
+                        else
+                        {
+                            cards.Remove(card);
+                            selectedCards.Add(card);
+                        }
                     }
                 }
             }
         }
 
         //Format and position selected cards
-        for (int i = 0; i < selectedCards.Count; i++)
-        {
-            if (selectedCards[i] == null)
-            {
-                selectedCards.Remove(selectedCards[i]);
-                return;
-            }
-
-            yPos = (selectedCards[i].hovered) ? hoverHeight : 0;
-            selectedCards[i].transform.localPosition = new Vector2(cardSpacing * i, yPos + selectedCardsYOffset);
-        }
+        UpdateCardPositions(selectedCards, selectedCardsYOffset);
 
         //Format and position hand cards
-        for (int i = 0; i < cards.Count; i++)
+        UpdateCardPositions(cards, 0);
+    }
+
+    void UpdateCardPositions(List<CardScript> cardsList, float yOffset)
+    {
+        for (int i = 0; i < cardsList.Count; i++)
         {
-            if (cards[i] == null)
+            if (cardsList[i] == null)
             {
-                cards.Remove(cards[i]);
+                cardsList.Remove(cardsList[i]);
                 return;
             }
 
-            yPos = (cards[i].hovered) ? hoverHeight : 0;
-            cards[i].transform.localPosition = new Vector2(cardSpacing * i, yPos);
+            if (running) return;
+            yPos = (cardsList[i].hovered) ? hoverHeight : 0;
+            cardsList[i].pos = new Vector2(cardSpacing * i, yPos + yOffset);
         }
     }
 
@@ -131,6 +133,7 @@ public class CardHolder : MonoBehaviour
         for (int i = 0; i < maxCards; i++)
         {
             GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], transform);
+            _card.GetComponent<CardScript>().holder = this;
             cards.Add(_card.GetComponent<CardScript>());
         }
     }
@@ -141,21 +144,52 @@ public class CardHolder : MonoBehaviour
         running = true;
         indicatorArrow.gameObject.SetActive(true);
 
+        for (int i = 0; i < selectedCards.Count; i++)
+        {
+            selectedCards[i].pos = new Vector2(cardSpacing * i, selectedCardsYOffset);
+        }
+
         //Go through and run each card
         for (int i = 0; i < selectedCards.Count; i++) 
         {
             indicatorArrow.localPosition = new Vector2(cardSpacing * i, indicatorYOffset);
+
+            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, selectedCardsYOffset + hoverHeight);
+
+            selectedCards[i].pos = pos;
             selectedCards[i].type.UseCard(this.gameObject);
             yield return new WaitForSeconds(1);
         }
 
-        //Destroy all the cards (clean up logic is in Update)
-        for(int i = 0; i < selectedCards.Count; i++)
+        indicatorArrow.gameObject.SetActive(false);
+
+        //loop through and put new position
+        for (int i = 0; i < selectedCards.Count; i++)
         {
-            Destroy(selectedCards[i].gameObject);
+            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, selectedCardsYOffset);
+
+            selectedCards[i].pos = pos;
+            yield return new WaitForSeconds(.1f); //offset for cool effect
         }
 
-        indicatorArrow.gameObject.SetActive(false);
+        //Destroy all the cards (clean up logic is in Update)
+        StartCoroutine(DestroyCards());
+    }
+
+    IEnumerator DestroyCards()
+    {
+        //Create new Array to counteract the cleanup
+        CardScript[] cardsToDelete = selectedCards.ToArray();
+
+        //loop through and destroy them
+        for (int i = 0; i < cardsToDelete.Length; i++)
+        {
+            cardsToDelete[i].destroyed = true;
+            yield return new WaitForSeconds(.1f); //offset for cool effect
+        }
+
+        yield return new WaitForSeconds(.5f);
+
         running = false;
     }
 }

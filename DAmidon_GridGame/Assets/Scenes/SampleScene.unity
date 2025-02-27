@@ -485,7 +485,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -570,8 +570,9 @@ MonoBehaviour:
   cardSpacing: 100
   hoverHeight: 20
   selectedCardsYOffset: 150
+  cardMoveSpeed: 10
   indicatorArrow: {fileID: 1717320882}
-  indicatorYOffset: 235
+  indicatorYOffset: 250
 --- !u!1 &1639197188
 GameObject:
   m_ObjectHideFlags: 0
