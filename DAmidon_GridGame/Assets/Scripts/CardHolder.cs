@@ -133,13 +133,16 @@ public class CardHolder : MonoBehaviour
     //Fills with random cards
     void AddRandomCards()
     {
-        ClearCards();
-
-        for (int i = 0; i < maxCards; i++)
+        int numCardsToAdd = maxCards - (selectedCards.Count + cards.Count);
+        
+        if(numCardsToAdd > 0)
         {
-            GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], handTrans);
-            _card.GetComponent<CardScript>().holder = this;
-            cards.Add(_card.GetComponent<CardScript>());
+            for (int i = 0; i < numCardsToAdd; i++)
+            {
+                GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], handTrans);
+                _card.GetComponent<CardScript>().holder = this;
+                cards.Add(_card.GetComponent<CardScript>());
+            }
         }
     }
 
@@ -162,7 +165,7 @@ public class CardHolder : MonoBehaviour
         //Go through and run each card
         for (int i = 0; i < selectedCards.Count; i++) 
         {
-            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, hoverHeight);
+            Vector2 pos = new Vector2(cardSpacing * i, hoverHeight);
             indicatorPos = new Vector2(cardSpacing * i, indicatorYOffset);
 
             selectedCards[i].pos = pos;

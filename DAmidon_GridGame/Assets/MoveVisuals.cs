@@ -27,9 +27,10 @@ public class MoveVisuals : MonoBehaviour
         if (cardHolder.selectedCards.Count > 0)
         {
             if (!cardHolder.running && cardHolder.selectedCards.Count != lastFutureSelectedCards)
-                ShowFutureMoves();
+            ShowFutureMoves();
 
             lr.SetPosition(lr.positionCount - 1, (Vector2)ghostPlayer.transform.localPosition + gridManager.gridOffset);
+            lr.SetPosition(0, gridManager.PointToWorld(gridManager.player.gridChords) + gridManager.gridOffset);
 
             lr.enabled = true;
             ghostPlayer.gameObject.SetActive(true);
@@ -50,8 +51,6 @@ public class MoveVisuals : MonoBehaviour
         ghostPlayer.gridChords = gridManager.player.gridChords;
         ghostPlayer.dirVector = gridManager.player.dirVector;
         ghostPlayer.dir = gridManager.player.dir;
-
-        lr.SetPosition(0, gridManager.PointToWorld(gridManager.player.gridChords) + gridManager.gridOffset);
 
         for (int i = 0; i < cardHolder.selectedCards.Count; i++)
         {
