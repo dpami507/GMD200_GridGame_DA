@@ -7,8 +7,9 @@ public class ForwardCard : CardType
 {
     public int spacesForward;
 
-    public override void UseCard(GameObject player)
+    public override void UseCard(GameObject obj)
     {
         Debug.Log($"Moving {spacesForward} spaces!");
+        obj.GetComponent<TileObjBase>().Move(spacesForward);
     }
 }

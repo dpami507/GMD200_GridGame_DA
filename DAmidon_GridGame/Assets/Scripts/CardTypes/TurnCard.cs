@@ -7,13 +7,15 @@ public class TurnCard : CardType
 {
     public int degrees;
 
-    public override void UseCard(GameObject player)
+    public override void UseCard(GameObject obj)
     {
-        if(degrees == 90)
+        if(degrees == -90)
             Debug.Log($"Turning Right {degrees} degrees!");
-        else if(degrees == -90)
+        else if(degrees == 90)
             Debug.Log($"Turning Left {degrees} degrees!");
         else
             Debug.Log($"Cant Turn {degrees} degrees!");
+
+        obj.GetComponent<TileObjBase>().Rotate(degrees);
     }
 }

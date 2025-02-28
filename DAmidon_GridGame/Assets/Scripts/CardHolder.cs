@@ -14,22 +14,22 @@ public class CardHolder : MonoBehaviour
     [Header("Cards Setup")]
     public CardList possibleCards;
     public GameObject cardOutline;
-    public Transform outlineParent;
     public int maxCards;
 
     [Header("Cards Positioning")]
+    public Transform handTrans;
+    public Transform selectedTrans;
     public float cardSpacing;
     public float hoverHeight;
-    public float selectedCardsYOffset;
     public float cardMoveSpeed;
 
     [Header("Cards Running")]
     public Transform indicatorArrow;
     public float indicatorYOffset;
+    public float indicatorSpeed;
+    Vector2 indicatorPos;
 
-    //Private
-    float yPos;
-    bool running;
+    public bool running;
 
     private void Start()
     {
@@ -43,7 +43,7 @@ public class CardHolder : MonoBehaviour
         //If cards are running dont allow any input or anything
         if (!running)
         {
-            if (Input.GetKeyDown(KeyCode.A)) //Fills with random cards
+            if (Input.GetKeyDown(KeyCode.H)) //Fills with random cards
                 AddRandomCards();
             else if (Input.GetKeyDown(KeyCode.R)) //Clears all cards in lists
                 ClearCards();
@@ -64,11 +64,13 @@ public class CardHolder : MonoBehaviour
                         if (selectedCards.Contains(card))
                         {
                             cards.Add(card);
+                            card.transform.parent = handTrans;
                             selectedCards.Remove(card);
                         }
                         else
                         {
                             cards.Remove(card);
+                            card.transform.parent = selectedTrans;
                             selectedCards.Add(card);
                         }
                     }
@@ -77,13 +79,16 @@ public class CardHolder : MonoBehaviour
         }
 
         //Format and position selected cards
-        UpdateCardPositions(selectedCards, selectedCardsYOffset);
+        UpdateCardPositions(selectedCards);
 
         //Format and position hand cards
-        UpdateCardPositions(cards, 0);
+        UpdateCardPositions(cards);
+
+        //Lerp Arrow Speed
+        indicatorArrow.localPosition = Vector2.Lerp(indicatorArrow.localPosition, indicatorPos, indicatorSpeed * Time.deltaTime);
     }
 
-    void UpdateCardPositions(List<CardScript> cardsList, float yOffset)
+    void UpdateCardPositions(List<CardScript> cardsList)
     {
         for (int i = 0; i < cardsList.Count; i++)
         {
@@ -94,8 +99,8 @@ public class CardHolder : MonoBehaviour
             }
 
             if (running) return;
-            yPos = (cardsList[i].hovered) ? hoverHeight : 0;
-            cardsList[i].pos = new Vector2(cardSpacing * i, yPos + yOffset);
+            float yOff = (cardsList[i].hovered) ? hoverHeight : 0;
+            cardsList[i].pos = new Vector2(cardSpacing * i, yOff);
         }
     }
 
@@ -104,11 +109,11 @@ public class CardHolder : MonoBehaviour
     {
         for (int i = 0; i < maxCards; i++)
         {
-            GameObject _card = Instantiate(cardOutline, outlineParent);
+            GameObject _card = Instantiate(cardOutline, handTrans);
             _card.transform.localPosition = new Vector2(cardSpacing * i, 0);
 
-            _card = Instantiate(cardOutline, outlineParent);
-            _card.transform.localPosition = new Vector2(cardSpacing * i, selectedCardsYOffset);
+            _card = Instantiate(cardOutline, selectedTrans);
+            _card.transform.localPosition = new Vector2(cardSpacing * i, 0);
         }
     }
 
@@ -132,7 +137,7 @@ public class CardHolder : MonoBehaviour
 
         for (int i = 0; i < maxCards; i++)
         {
-            GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], transform);
+            GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], handTrans);
             _card.GetComponent<CardScript>().holder = this;
             cards.Add(_card.GetComponent<CardScript>());
         }
@@ -144,33 +149,39 @@ public class CardHolder : MonoBehaviour
         running = true;
         indicatorArrow.gameObject.SetActive(true);
 
+        //Go through both sets and set their position to nonhover pos
         for (int i = 0; i < selectedCards.Count; i++)
         {
-            selectedCards[i].pos = new Vector2(cardSpacing * i, selectedCardsYOffset);
+            selectedCards[i].pos = new Vector2(cardSpacing * i, 0);
+        }
+        for (int i = 0; i < cards.Count; i++)
+        {
+            cards[i].pos = new Vector2(cardSpacing * i, 0);
         }
 
         //Go through and run each card
         for (int i = 0; i < selectedCards.Count; i++) 
         {
-            indicatorArrow.localPosition = new Vector2(cardSpacing * i, indicatorYOffset);
-
-            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, selectedCardsYOffset + hoverHeight);
+            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, hoverHeight);
+            indicatorPos = new Vector2(cardSpacing * i, indicatorYOffset);
 
             selectedCards[i].pos = pos;
-            selectedCards[i].type.UseCard(this.gameObject);
+            selectedCards[i].type.UseCard(GridManager.instance.player.gameObject);
             yield return new WaitForSeconds(1);
         }
 
-        indicatorArrow.gameObject.SetActive(false);
+        indicatorPos = new Vector2(cardSpacing * (selectedCards.Count - 1), 0);
 
         //loop through and put new position
         for (int i = 0; i < selectedCards.Count; i++)
         {
-            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, selectedCardsYOffset);
+            Vector2 pos = new Vector2(selectedCards[i].transform.localPosition.x, 0);
 
             selectedCards[i].pos = pos;
             yield return new WaitForSeconds(.1f); //offset for cool effect
         }
+
+        indicatorArrow.gameObject.SetActive(false);
 
         //Destroy all the cards (clean up logic is in Update)
         StartCoroutine(DestroyCards());
