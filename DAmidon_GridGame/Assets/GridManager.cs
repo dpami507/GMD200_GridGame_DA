@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -10,6 +9,8 @@ public class GridManager : MonoBehaviour
 
     public float padding;
     public float squareSize;
+
+    public Vector2 gridOffset;
 
     [SerializeField] GridTile tilePrefab;
 
@@ -47,8 +48,8 @@ public class GridManager : MonoBehaviour
         //Center Grid
         float y = -(((numRows - 1) * squareSize) + ((numRows - 1) * padding)) / 2f;
         float x = -(((numColumns - 1) * squareSize) + ((numColumns - 1) * padding)) / 2f;
-
-        transform.position = new Vector2(x, y);
+        gridOffset = new Vector2(x, y);
+        transform.position = gridOffset;
     }
 
     void CreatePlayer()
