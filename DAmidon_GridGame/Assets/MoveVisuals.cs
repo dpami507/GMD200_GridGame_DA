@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class MoveVisuals : MonoBehaviour
@@ -24,48 +25,76 @@ public class MoveVisuals : MonoBehaviour
 
     private void Update()
     {
-        if (cardHolder.selectedCards.Count > 0)
+        if (!cardHolder.running)
         {
-            if (!cardHolder.running && cardHolder.selectedCards.Count != lastFutureSelectedCards)
-            ShowFutureMoves();
+            if(lastFutureSelectedCards != cardHolder.selectedCards.Count)
+            {
+                lr.SetPosition(0, RoundVector(gridManager.player.transform.position)); //Set first pos
+                ShowFutureMoves();
+            }
+            lr.SetPosition(cardHolder.selectedCards.Count, RoundVector(ghostPlayer.transform.position)); //Set last pos
+        }
 
-            lr.SetPosition(lr.positionCount - 1, (Vector2)ghostPlayer.transform.localPosition + gridManager.gridOffset);
-            lr.SetPosition(0, gridManager.PointToWorld(gridManager.player.gridChords) + gridManager.gridOffset);
-
+        if(cardHolder.selectedCards.Count == 0)
+        {
+            ghostPlayer.transform.position = gridManager.player.transform.position;
+            ClearPointsList();
+            ghostPlayer.gameObject.SetActive(false);
+        }
+        else if (cardHolder.selectedCards.Count > 0) //Show lr and arrow if cards are selected
+        {
             lr.enabled = true;
             ghostPlayer.gameObject.SetActive(true);
         }
         else
         {
             lr.enabled = false;
-            ghostPlayer.transform.localPosition = gridManager.player.transform.localPosition;
+            ClearPointsList();
             ghostPlayer.gameObject.SetActive(false);
         }
     }
 
     void ShowFutureMoves()
     {
-        lastFutureSelectedCards = cardHolder.selectedCards.Count;
-        ClearPointsList();
+        ClearPointsList(); //Clears the points
+        lastFutureSelectedCards = cardHolder.selectedCards.Count; //Sets the last known amount of cards
 
-        ghostPlayer.gridChords = gridManager.player.gridChords;
-        ghostPlayer.dirVector = gridManager.player.dirVector;
-        ghostPlayer.dir = gridManager.player.dir;
+        ghostPlayer.gridChords = gridManager.player.gridChords; //Set ghost player to player cords
+        ghostPlayer.dirVector = gridManager.player.dirVector; //Set ghost dirVector to player
+        ghostPlayer.dir = gridManager.player.dir; //Set ghost dir to player
 
+        //For all the cards in the selected cards do that on the ghost player
         for (int i = 0; i < cardHolder.selectedCards.Count; i++)
         {
-            lr.positionCount++;
-            cardHolder.selectedCards[i].type.UseCard(ghostPlayer.gameObject);
+            Vector2 pointPos = RoundVector((Vector2)gridManager.GetTile(ghostPlayer.gridChords.x , ghostPlayer.gridChords.y).transform.localPosition + gridManager.gridOffset);
 
-            Vector2 pointPos = gridManager.PointToWorld(ghostPlayer.gridChords)
-                + gridManager.gridOffset;
+            lr.positionCount++; //Create new position for lr
+            cardHolder.selectedCards[i].type.UseCard(ghostPlayer.gameObject);
 
             GameObject _point = Instantiate(point, pointPos, Quaternion.identity, pointsParent);
             points.Add(_point);
 
-            if (i != cardHolder.selectedCards.Count - 1)
+            //Set all positions except first and last
+            if (i != cardHolder.selectedCards.Count)
                 lr.SetPosition(i + 1, pointPos);
         }
+    }
+
+    Vector2 RoundVector(Vector2 vec)
+    {
+        float x = vec.x;
+        x *= 100f;
+        x = Mathf.RoundToInt(x);
+        x /= 100f;
+
+        float y = vec.y;
+        y *= 100f;
+        y = Mathf.RoundToInt(y);
+        y /= 100f;
+
+        Vector2 result = new Vector2(x, y);
+
+        return result;
     }
 
     void ClearPointsList()

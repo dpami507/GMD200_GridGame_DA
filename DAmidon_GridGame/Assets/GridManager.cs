@@ -11,8 +11,10 @@ public class GridManager : MonoBehaviour
     public float squareSize;
 
     public Vector2 gridOffset;
+    public Transform tilesParent;
 
     [SerializeField] GridTile tilePrefab;
+    public List<GridTile> tiles;
 
     public GameObject playerPrefab;
     [HideInInspector] public PlayerScript player;
@@ -34,7 +36,8 @@ public class GridManager : MonoBehaviour
         {
             for(int j = 0; j < numColumns; j++)
             {
-                GridTile tile = Instantiate(tilePrefab, transform);
+                GridTile tile = Instantiate(tilePrefab, tilesParent);
+                tiles.Add(tile);
 
                 tile.transform.localScale = Vector3.one * squareSize;
                 Vector2 tilePos = new Vector2((j * squareSize) + (padding * j), (i * squareSize) + (padding * i));
@@ -57,10 +60,16 @@ public class GridManager : MonoBehaviour
         player = Instantiate(playerPrefab, transform).GetComponent<PlayerScript>();
         player.transform.localScale = Vector3.one * squareSize;
         player.gridManager = this;
-        SetPoint(Vector2Int.zero);
+        /*player.gridChords =*/ ClampPoint(Vector2Int.zero);
     }
 
-    public Vector2Int SetPoint(Vector2Int point)
+    public GridTile GetTile(int col, int row)
+    {
+        int index = (row * numColumns) + col;
+        return tiles[index];
+    }
+
+    public Vector2Int ClampPoint(Vector2Int point)
     {
         int x = point.x;
         int y = point.y;
@@ -69,11 +78,5 @@ public class GridManager : MonoBehaviour
         x = Mathf.Clamp(x, 0, numColumns - 1);
 
         return new Vector2Int(x, y);
-    }
-
-    public Vector2 PointToWorld(Vector2Int point)
-    {
-        Vector2 worldPos = new Vector2((point.x * squareSize) + (point.x * padding), (point.y * squareSize) + (point.y * padding));
-        return worldPos;
     }
 }

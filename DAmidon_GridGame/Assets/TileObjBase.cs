@@ -20,12 +20,12 @@ public class TileObjBase : MonoBehaviour
         float t = 7 * Time.deltaTime;
 
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0, 0, dir), t);
-        transform.localPosition = Vector2.Lerp(transform.localPosition, gridManager.PointToWorld(gridChords), t);
+        transform.localPosition = Vector2.Lerp(transform.localPosition, gridManager.GetTile(gridChords.x, gridChords.y).transform.localPosition, t);
     }
 
     public void Move(int spaces)
     {
-        gridChords = gridManager.SetPoint(gridChords + (dirVector * spaces));
+        gridChords = gridManager.ClampPoint(gridChords + (dirVector * spaces));
     }
 
     public void Rotate(int deg)
