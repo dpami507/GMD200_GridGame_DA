@@ -28,13 +28,13 @@ public class GameManager : MonoBehaviour
     {
         if (isPlayersTurn && !setUp)
         {
-            cardHolder.AddRandomCards(cardHolder.selectedCards, cardHolder.cards, cardHolder.handTrans, true);
             setUp = true;
+            cardHolder.StartTurn();
         }
         else if (!isPlayersTurn && !setUp)
         {
-            cardHolder.AddRandomCards(enemyAI.selectedCards, enemyAI.handCards, enemyAI.transform, false);
             setUp = true;
+            enemyAI.StartTurn();
             StartCoroutine(enemyAI.RunEnemyAI());
         }
     }

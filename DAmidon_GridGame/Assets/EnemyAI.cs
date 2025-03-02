@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
@@ -28,11 +29,17 @@ public class EnemyAI : MonoBehaviour
         cardHolder.AddRandomCards(selectedCards, handCards, this.transform, false);
     }
 
+    public void StartTurn()
+    {
+        cardHolder.ClearCards(selectedCards, handCards);
+        cardHolder.AddRandomCards(selectedCards, handCards, this.transform, false);
+    }
+
     public IEnumerator RunEnemyAI()
     {
         running = true;
 
-        while (running)
+        while (running && selectedCards.Count + handCards.Count > 0)
         {
             yield return new WaitForSeconds(1);
 
@@ -44,7 +51,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     TryTurn();
                 }
-                else //Move or fire
+                else //Move or fire if Facing
                 {
                     if (HasCard(CardType.Type.FIRE) >= 0)
                     {
@@ -80,20 +87,55 @@ public class EnemyAI : MonoBehaviour
                     }
                 }
             }
+            //If not on same x
             else if (player.gridChords.x != thisObj.gridChords.x)
             {
+                //Check if facing correct way
                 if (DirToFace() == thisObj.dir)
                 {
+                    //Try move if facing
                     TryMove();
                 }
+                //If not on same y
                 else if (player.gridChords.y != thisObj.gridChords.y)
                 {
+                    //Are we facing correctly
                     if (DirToFace() == thisObj.dir)
                     {
+                        //Try move if so
                         TryMove();
                     }
                     else
                     {
+                        //Turn if not
+                        TryTurn();
+                    }
+                }
+                else
+                {
+                    TryTurn();
+                }
+            }
+            else if (player.gridChords.y != thisObj.gridChords.y)
+            {
+                //Check if facing correct way
+                if (DirToFace() == thisObj.dir)
+                {
+                    //Try move if facing
+                    TryMove();
+                }
+                //If not on same y
+                else if (player.gridChords.x != thisObj.gridChords.x)
+                {
+                    //Are we facing correctly
+                    if (DirToFace() == thisObj.dir)
+                    {
+                        //Try move if so
+                        TryMove();
+                    }
+                    else
+                    {
+                        //Turn if not
                         TryTurn();
                     }
                 }
@@ -159,6 +201,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
+            //Just turn in a direction
             if (HasCard(CardType.Type.TURNRIGHT) >= 0)
             {
                 int index = HasCard(CardType.Type.TURNRIGHT);
@@ -200,27 +243,37 @@ public class EnemyAI : MonoBehaviour
 
     float DirToFace()
     {
-        //Driection is the negative normalized of the value
+        //If x dis < y dist
         if(Mathf.Abs(player.gridChords.x - thisObj.gridChords.x) < Mathf.Abs(player.gridChords.y - thisObj.gridChords.y))
         {
+            //If to the left face left
             if (player.gridChords.x < thisObj.gridChords.x)
                 return 180;
-            else if (player.gridChords.x < thisObj.gridChords.x)
+            //if to the right face right
+            else if (player.gridChords.x > thisObj.gridChords.x)
                 return 0;
-            else
-            {
+            else //When x is ==
+                //If below face down
                 if (player.gridChords.y < thisObj.gridChords.y)
                     return 270;
+                //face up
                 else
                     return 90;
-            }
         }
-        else
+        else //If y dist is less than x dist
         {
+            //If below face down
             if (player.gridChords.y < thisObj.gridChords.y)
+            {
+                Debug.Log("Player Below");
                 return 270;
+            }
+            //if above face up
             else if (player.gridChords.y > thisObj.gridChords.y)
+            {
+                Debug.Log("Player Above");
                 return 90;
+            }
             else //when y is ==
             {
                 if (player.gridChords.x < thisObj.gridChords.x)

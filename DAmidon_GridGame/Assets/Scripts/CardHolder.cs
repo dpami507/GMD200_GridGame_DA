@@ -154,6 +154,12 @@ public class CardHolder : MonoBehaviour
         }
     }
 
+    public void StartTurn()
+    {
+        ClearCards(selectedCards, cards);
+        AddRandomCards(selectedCards, cards, handTrans, true);
+    }
+
     //Runs the cards
     IEnumerator RunCards()
     {
