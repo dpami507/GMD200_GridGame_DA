@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardScript : MonoBehaviour
 {
-    public CardHolder holder;
+    public int cardMoveSpeed;
     public CardType type;
 
     public bool hovered;
@@ -17,7 +17,7 @@ public class CardScript : MonoBehaviour
 
     private void Update()
     {
-        transform.localPosition = Vector2.Lerp(transform.localPosition, pos, holder.cardMoveSpeed * Time.deltaTime);
+        transform.localPosition = Vector2.Lerp(transform.localPosition, pos, cardMoveSpeed * Time.deltaTime);
 
         if(destroyed)
         {

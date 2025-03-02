@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4dc36a09ddc6694f903b94185f77a96, type: 3}
   m_Name: ForwardThree
   m_EditorClassIdentifier: 
+  type: 1
   spacesForward: 3

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class MoveVisuals : MonoBehaviour
@@ -29,7 +28,6 @@ public class MoveVisuals : MonoBehaviour
         {
             if(lastFutureSelectedCards != cardHolder.selectedCards.Count)
             {
-                lr.SetPosition(0, RoundVector(gridManager.player.transform.position)); //Set first pos
                 ShowFutureMoves();
             }
             lr.SetPosition(cardHolder.selectedCards.Count, RoundVector(ghostPlayer.transform.position)); //Set last pos
@@ -74,9 +72,8 @@ public class MoveVisuals : MonoBehaviour
             GameObject _point = Instantiate(point, pointPos, Quaternion.identity, pointsParent);
             points.Add(_point);
 
-            //Set all positions except first and last
-            if (i != cardHolder.selectedCards.Count)
-                lr.SetPosition(i + 1, pointPos);
+            //Set all positions
+            lr.SetPosition(i, pointPos);
         }
     }
 

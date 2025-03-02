@@ -10,11 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6891421247146950924}
   - component: {fileID: 7829866149192331748}
-  - component: {fileID: 7152961760859324974}
-  - component: {fileID: -5724661415459087651}
-  - component: {fileID: 7885854657224061151}
+  - component: {fileID: 8852120378922566162}
+  - component: {fileID: -8462216549593194272}
+  - component: {fileID: -2854959932015531496}
+  - component: {fileID: 5425738209259566621}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_Sprite: {fileID: -906885194, guid: 0ba6b58a6480def40bce7015682ad7e4, type: 3}
-  m_Color: {r: 0.5019608, g: 0.50200593, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.50200593, b: 0.5019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -88,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7152961760859324974
+--- !u!114 &8852120378922566162
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5796901316642094977}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c6df8f0f96af3f4a92895bec664f863, type: 3}
+  m_Script: {fileID: 11500000, guid: e92e8de884e72ed429a3459eed4d344b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dirVector: {x: 0, y: 0}
@@ -106,7 +107,7 @@ MonoBehaviour:
   dir: 0
   explosionPrefab: {fileID: 4922537819870933953, guid: 36444e59249f91f468e409ecada38418, type: 3}
   muzzle: {fileID: 1098753346346620135}
---- !u!114 &-5724661415459087651
+--- !u!114 &-8462216549593194272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825b5d8646612de498349cb060bebf7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &7885854657224061151
+  health: 0
+  dead: 0
+--- !u!61 &-2854959932015531496
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,6 +166,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5425738209259566621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5796901316642094977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c579bc54d6d4b944c917c727da764da8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7309821969937809638
 GameObject:
   m_ObjectHideFlags: 0

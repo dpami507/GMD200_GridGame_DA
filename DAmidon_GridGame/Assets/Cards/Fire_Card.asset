@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae1558e58d088af418791cd64c34f83c, type: 3}
   m_Name: Fire_Card
   m_EditorClassIdentifier: 
+  type: 0

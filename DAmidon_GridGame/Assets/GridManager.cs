@@ -19,6 +19,9 @@ public class GridManager : MonoBehaviour
     public GameObject playerPrefab;
     [HideInInspector] public PlayerScript player;
 
+    public GameObject enemyPrefab;
+    [HideInInspector] public EnemyScript enemy;
+
     public static GridManager instance;
 
     private void Awake()
@@ -27,6 +30,7 @@ public class GridManager : MonoBehaviour
 
         InitGrid();
         CreatePlayer();
+        CreateEnemy();
     }
 
     void InitGrid()
@@ -60,7 +64,18 @@ public class GridManager : MonoBehaviour
         player = Instantiate(playerPrefab, transform).GetComponent<PlayerScript>();
         player.transform.localScale = Vector3.one * squareSize;
         player.gridManager = this;
-        /*player.gridChords =*/ ClampPoint(Vector2Int.zero);
+        player.gridChords = ClampPoint(GetTile(0, 0).gridChords);
+        player.dir = 0;
+    }
+
+    void CreateEnemy()
+    {
+        Vector2 pos = GetTile(numColumns - 1, numRows - 1).transform.position;
+        enemy = Instantiate(enemyPrefab, pos, Quaternion.identity, transform).GetComponent<EnemyScript>();
+        enemy.transform.localScale = Vector3.one * squareSize;
+        enemy.gridManager = this;
+        enemy.gridChords = ClampPoint(GetTile(numColumns - 1, numRows - 1).gridChords);
+        enemy.dir = 180;
     }
 
     public GridTile GetTile(int col, int row)

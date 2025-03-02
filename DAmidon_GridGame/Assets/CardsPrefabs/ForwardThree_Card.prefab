@@ -91,11 +91,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4ba6dafee25b8b449c1bbc06bb0a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holder: {fileID: 0}
+  cardMoveSpeed: 7
   type: {fileID: 11400000, guid: bea3da6e94421674cb017dd068dedb58, type: 2}
   hovered: 0
   pos: {x: 0, y: 0}
   shrinkSpeed: 10
+  destroyed: 0
 --- !u!212 &8439316199607561537
 SpriteRenderer:
   m_ObjectHideFlags: 0

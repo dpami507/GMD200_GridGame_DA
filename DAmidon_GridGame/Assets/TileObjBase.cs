@@ -12,11 +12,16 @@ public class TileObjBase : MonoBehaviour
 
     private void Start()
     {
-        dirVector = new Vector2Int((int)Mathf.Cos(dir), (int)Mathf.Sin(dir));
+        dirVector = new Vector2Int((int)Mathf.Cos(dir * Mathf.Deg2Rad), (int)Mathf.Sin(dir * Mathf.Deg2Rad));
     }
 
     private void Update()
     {
+        if (dir >= 360)
+        {
+            dir -= 360;
+        }
+
         float t = 7 * Time.deltaTime;
 
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0, 0, dir), t);
@@ -25,7 +30,13 @@ public class TileObjBase : MonoBehaviour
 
     public void Move(int spaces)
     {
-        gridChords = gridManager.ClampPoint(gridChords + (dirVector * spaces));
+        Vector2Int pos;
+
+        if(gridManager.enemy.gridChords == gridChords + (dirVector * spaces) || gridManager.player.gridChords == gridChords + (dirVector * spaces))
+            pos = gridChords + (dirVector * (spaces - 1));
+        else pos = gridChords + (dirVector * spaces);
+
+        gridChords = gridManager.ClampPoint(pos);
     }
 
     public void Rotate(int deg)

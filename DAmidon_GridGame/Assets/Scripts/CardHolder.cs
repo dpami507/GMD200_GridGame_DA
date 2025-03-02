@@ -41,13 +41,9 @@ public class CardHolder : MonoBehaviour
     private void Update()
     {
         //If cards are running dont allow any input or anything
-        if (!running)
+        if (!running && GameManager.instance.isPlayersTurn)
         {
-            if (Input.GetKeyDown(KeyCode.H)) //Fills with random cards
-                AddRandomCards();
-            else if (Input.GetKeyDown(KeyCode.R)) //Clears all cards in lists
-                ClearCards();
-            else if (Input.GetKeyDown(KeyCode.Space)) //Run cards
+            if (Input.GetKeyDown(KeyCode.Space)) //Run cards
                 StartCoroutine(RunCards());
 
             if (Input.GetMouseButtonDown(0)) //Add Card or Remove card to 'selected cards'
@@ -118,30 +114,42 @@ public class CardHolder : MonoBehaviour
     }
 
     //Removes all cards
-    void ClearCards()
+    public void ClearCards(List<CardScript> selected, List<CardScript> hand)
     {
-        for(int i = 0; i < cards.Count; i++)
+        for(int i = 0; i < hand.Count; i++)
         {
-            Destroy(cards[i].gameObject);
+            if(hand[i] == null)
+            {
+                hand.RemoveAt(i);
+            }
+
+            Destroy(hand[i].gameObject);
+            hand.RemoveAt(i);
         }
-        for (int i = 0; i < selectedCards.Count; i++)
+        for (int i = 0; i < selected.Count; i++)
         {
-            Destroy(selectedCards[i].gameObject);
+            if (selected[i] == null)
+            {
+                selected.RemoveAt(i);
+            }
+
+            Destroy(selected[i].gameObject);
+            selected.RemoveAt(i);
         }
     }
 
     //Fills with random cards
-    void AddRandomCards()
+    public void AddRandomCards(List<CardScript> selected, List<CardScript> hand, Transform parent, bool visable)
     {
-        int numCardsToAdd = maxCards - (selectedCards.Count + cards.Count);
+        int numCardsToAdd = maxCards - (selected.Count + hand.Count);
         
         if(numCardsToAdd > 0)
         {
             for (int i = 0; i < numCardsToAdd; i++)
             {
-                GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)], handTrans);
-                _card.GetComponent<CardScript>().holder = this;
-                cards.Add(_card.GetComponent<CardScript>());
+                GameObject _card = Instantiate(possibleCards.cards[Random.Range(0, possibleCards.cards.Length)].gameObject, parent);
+                _card.SetActive(visable);
+                hand.Add(_card.GetComponent<CardScript>());
             }
         }
     }
@@ -186,6 +194,8 @@ public class CardHolder : MonoBehaviour
 
         indicatorArrow.gameObject.SetActive(false);
 
+        AddRandomCards(selectedCards, cards, handTrans, true);
+
         //Destroy all the cards (clean up logic is in Update)
         StartCoroutine(DestroyCards());
     }
@@ -205,5 +215,7 @@ public class CardHolder : MonoBehaviour
         yield return new WaitForSeconds(.5f);
 
         running = false;
+        GameManager.instance.isPlayersTurn = false;
+        GameManager.instance.EndTurn(false);
     }
 }

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b42a2d094a007b4fa9a82d68a565612, type: 3}
   m_Name: TurnRight_Card
   m_EditorClassIdentifier: 
+  type: 3
   degrees: -90

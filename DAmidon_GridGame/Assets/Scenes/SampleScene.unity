@@ -153,6 +153,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1647741673}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &87039420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 87039422}
+  - component: {fileID: 87039421}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &87039421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87039420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2e5ea664418f5a408469061e90c6aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayersTurn: 0
+  cardHolder: {fileID: 1427017547}
+--- !u!4 &87039422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87039420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9558364, y: -1.0437396, z: 172.7935}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &468987505
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,8 +810,11 @@ MonoBehaviour:
   gridOffset: {x: 0, y: 0}
   tilesParent: {fileID: 2031738825}
   tilePrefab: {fileID: -4669726377869557953, guid: 747a2bd26fc4f7747b9f54484d14bdf0, type: 3}
+  tiles: []
   playerPrefab: {fileID: 5796901316642094977, guid: 09076eb3296f68a4b87ac3558336ed33, type: 3}
   player: {fileID: 0}
+  enemyPrefab: {fileID: 5796901316642094977, guid: c8214a022c88a32499a411e86967fadd, type: 3}
+  enemy: {fileID: 0}
 --- !u!4 &1647741673
 Transform:
   m_ObjectHideFlags: 0
@@ -870,8 +919,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.4584905, b: 0.4584905, a: 1}
-      key1: {r: 1, g: 0.45882353, b: 0.45882353, a: 1}
+      key0: {r: 0.42352942, g: 0.44313726, b: 0.88235295, a: 1}
+      key1: {r: 0.42352942, g: 0.44313726, b: 0.88235295, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1098,7 +1147,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f224bfd122877a34aa49c63693fc317b, type: 3}
-  m_Color: {r: 1, g: 0.45882353, b: 0.45882353, a: 1}
+  m_Color: {r: 0.039504714, g: 0, b: 0.6320754, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1117,3 +1166,4 @@ SceneRoots:
   - {fileID: 935581587}
   - {fileID: 1114258161}
   - {fileID: 1647741673}
+  - {fileID: 87039422}
