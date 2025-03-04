@@ -22,7 +22,6 @@ public class PlayerScript : TileObjBase
         RaycastHit2D hit = Physics2D.Raycast(muzzle.position, muzzle.right, 100);
         if(hit && hit.transform.GetComponent<Health>())
         {
-            Debug.Log("hit");
             hit.transform.GetComponent<Health>().TakeDamage();
         }
     }

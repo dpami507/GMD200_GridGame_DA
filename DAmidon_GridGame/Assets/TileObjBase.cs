@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.VersionControl.Asset;
 
 public class TileObjBase : MonoBehaviour
 {
@@ -30,24 +31,30 @@ public class TileObjBase : MonoBehaviour
 
     public void Move(int spaces)
     {
-        Vector2Int pos;
-
-        if(gridManager.enemy.gridChords == gridChords + (dirVector * spaces) || gridManager.player.gridChords == gridChords + (dirVector * spaces))
-            pos = gridChords + (dirVector * (spaces - 1));
-        else pos = gridChords + (dirVector * spaces);
+        Vector2Int pos = TrySpace(spaces);
 
         gridChords = gridManager.ClampPoint(pos);
+    }
+    Vector2Int TrySpace(int spaces)
+    {
+        Vector2Int pos = gridChords + (dirVector * spaces);
+
+        if (gridManager.enemy.gridChords == pos || gridManager.player.gridChords == pos)
+            pos = TrySpace(spaces - 1);
+        else
+            pos = gridChords + (dirVector * (spaces));
+
+        return pos;
     }
 
     public void Rotate(int deg)
     {
         dir += deg;
         dirVector = new Vector2Int((int)Mathf.Cos(dir * Mathf.Deg2Rad), (int)Mathf.Sin(dir * Mathf.Deg2Rad));
-        Debug.Log($"{dir}, {dirVector}");
     }
 
     public virtual void Fire()
     {
-        Debug.Log("Base Grid tile cannot fire");
+        Debug.Log("Base Grid tile cannot fire (most likely called on ghost player)");
     }
 }

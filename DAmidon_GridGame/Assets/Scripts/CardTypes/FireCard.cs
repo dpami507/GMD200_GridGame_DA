@@ -9,6 +9,5 @@ public class FireCard : CardType
     {
         obj.GetComponent<TileObjBase>().Fire();
         obj.GetComponent<TileObjBase>().Move(-1);
-        Debug.Log("Firing");
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] int health;
+    public int health;
     int maxHealth = 3;
 
     public bool dead;
@@ -19,6 +19,12 @@ public class Health : MonoBehaviour
         if(health <= 0)
             dead = true;
         else dead = false;
+
+        if(dead)
+        {
+            GameManager.instance.inPlay = false;
+            this.gameObject.SetActive(false);
+        }
     }
 
     public void TakeDamage()

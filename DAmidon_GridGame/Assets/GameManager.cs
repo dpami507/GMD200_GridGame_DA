@@ -7,9 +7,11 @@ public class GameManager : MonoBehaviour
     [Header("Player")]
     public bool isPlayersTurn;
     public bool setUp;
+    public bool inPlay;
     public CardHolder cardHolder;
 
     [Header("Enemy")]
+    public GameObject[] hearts;
     EnemyAI enemyAI;
 
     public static GameManager instance;
@@ -17,6 +19,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        inPlay = true;
+        isPlayersTurn = true;
     }
 
     private void Start()
@@ -26,6 +30,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        SetHearts(enemyAI.GetComponent<Health>().health);
+        if (!inPlay) return;
+
         if (isPlayersTurn && !setUp)
         {
             setUp = true;
@@ -35,12 +42,22 @@ public class GameManager : MonoBehaviour
         {
             setUp = true;
             enemyAI.StartTurn();
-            StartCoroutine(enemyAI.RunEnemyAI());
+        }
+    }
+
+    void SetHearts(int heartsActive)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < heartsActive)
+                hearts[i].SetActive(true);
+            else hearts[i].SetActive(false);
         }
     }
 
     public void EndTurn(bool isTurn)
     {
+        Debug.Log("Ending Turn");
         isPlayersTurn = isTurn;
         setUp = false;
     }

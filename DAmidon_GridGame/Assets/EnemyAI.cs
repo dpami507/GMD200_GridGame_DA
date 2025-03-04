@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
@@ -31,8 +30,10 @@ public class EnemyAI : MonoBehaviour
 
     public void StartTurn()
     {
-        cardHolder.ClearCards(selectedCards, handCards);
+        StartCoroutine(cardHolder.DestroyCards(selectedCards));
+        //StartCoroutine(cardHolder.DestroyCards(handCards));
         cardHolder.AddRandomCards(selectedCards, handCards, this.transform, false);
+        StartCoroutine(RunEnemyAI());
     }
 
     public IEnumerator RunEnemyAI()
@@ -41,7 +42,7 @@ public class EnemyAI : MonoBehaviour
 
         while (running && selectedCards.Count + handCards.Count > 0)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1f);
 
             //On equal x cords
             if (player.gridChords.x == thisObj.gridChords.x)
@@ -53,16 +54,24 @@ public class EnemyAI : MonoBehaviour
                 }
                 else //Move or fire if Facing
                 {
+                    //If can fire fire
                     if (HasCard(CardType.Type.FIRE) >= 0)
                     {
                         int index = HasCard(CardType.Type.FIRE);
                         MoveCard(index);
                     }
-                    if (HasCard(CardType.Type.MOVE) >= 0)
+                    //Else if it can move move
+                    else if (HasCard(CardType.Type.MOVE) >= 0)
                     {
                         int index = HasCard(CardType.Type.MOVE);
                         MoveCard(index);
                     }
+                    //else end turn
+                    else
+                    {
+                        running = false;
+                    }
+                    
                 }
             }
             //On equal y cords
@@ -182,6 +191,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
+                TryMove();
                 Debug.Log("No TURNLEFT Card Available");
                 running = false;
             }
@@ -195,6 +205,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
+                TryMove();
                 Debug.Log("No TURNRIGHT Card Available");
                 running = false;
             }
@@ -214,6 +225,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
+                TryMove();
                 Debug.Log("No TURN Card Available");
                 running = false;
             }

@@ -113,31 +113,6 @@ public class CardHolder : MonoBehaviour
         }
     }
 
-    //Removes all cards
-    public void ClearCards(List<CardScript> selected, List<CardScript> hand)
-    {
-        for(int i = 0; i < hand.Count; i++)
-        {
-            if(hand[i] == null)
-            {
-                hand.RemoveAt(i);
-            }
-
-            Destroy(hand[i].gameObject);
-            hand.RemoveAt(i);
-        }
-        for (int i = 0; i < selected.Count; i++)
-        {
-            if (selected[i] == null)
-            {
-                selected.RemoveAt(i);
-            }
-
-            Destroy(selected[i].gameObject);
-            selected.RemoveAt(i);
-        }
-    }
-
     //Fills with random cards
     public void AddRandomCards(List<CardScript> selected, List<CardScript> hand, Transform parent, bool visable)
     {
@@ -156,7 +131,6 @@ public class CardHolder : MonoBehaviour
 
     public void StartTurn()
     {
-        ClearCards(selectedCards, cards);
         AddRandomCards(selectedCards, cards, handTrans, true);
     }
 
@@ -203,13 +177,16 @@ public class CardHolder : MonoBehaviour
         AddRandomCards(selectedCards, cards, handTrans, true);
 
         //Destroy all the cards (clean up logic is in Update)
-        StartCoroutine(DestroyCards());
+        StartCoroutine(DestroyCards(selectedCards));
+        //StartCoroutine(DestroyCards(cards));
+
+        GameManager.instance.EndTurn(false);
     }
 
-    IEnumerator DestroyCards()
+    public IEnumerator DestroyCards(List<CardScript> cards)
     {
         //Create new Array to counteract the cleanup
-        CardScript[] cardsToDelete = selectedCards.ToArray();
+        CardScript[] cardsToDelete = cards.ToArray();
 
         //loop through and destroy them
         for (int i = 0; i < cardsToDelete.Length; i++)
@@ -221,7 +198,5 @@ public class CardHolder : MonoBehaviour
         yield return new WaitForSeconds(.5f);
 
         running = false;
-        GameManager.instance.isPlayersTurn = false;
-        GameManager.instance.EndTurn(false);
     }
 }
