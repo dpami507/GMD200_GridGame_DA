@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,12 +44,14 @@ public class GridManager : MonoBehaviour
                 GridTile tile = Instantiate(tilePrefab, tilesParent);
                 tiles.Add(tile);
 
-                tile.transform.localScale = Vector3.one * squareSize;
                 Vector2 tilePos = new Vector2((j * squareSize) + (padding * j), (i * squareSize) + (padding * i));
                 tile.transform.localPosition = tilePos;
                 tile.name = $"Tile ({j}, {i})";
                 tile.gridManager = this;
                 tile.gridChords = new Vector2Int(j, i);
+
+                tile.transform.localScale = Vector3.zero;
+                tile.transform.DOScale(Vector3.one * squareSize, .25f).SetEase(Ease.OutBack);
             }
         }
 
@@ -62,7 +65,8 @@ public class GridManager : MonoBehaviour
     void CreatePlayer()
     {
         player = Instantiate(playerPrefab, transform).GetComponent<PlayerScript>();
-        player.transform.localScale = Vector3.one * squareSize;
+        player.transform.localScale = Vector3.zero;
+        player.transform.DOScale(Vector3.one * squareSize, .25f).SetEase(Ease.OutBack);
         player.gridManager = this;
         player.gridChords = ClampPoint(GetTile(0, 0).gridChords);
         player.dir = 0;
@@ -72,7 +76,8 @@ public class GridManager : MonoBehaviour
     {
         Vector2 pos = GetTile(numColumns - 1, numRows - 1).transform.position;
         enemy = Instantiate(enemyPrefab, pos, Quaternion.identity, transform).GetComponent<EnemyScript>();
-        enemy.transform.localScale = Vector3.one * squareSize;
+        enemy.transform.localScale = Vector3.zero;
+        enemy.transform.DOScale(Vector3.one * squareSize, .25f).SetEase(Ease.OutBack);
         enemy.gridManager = this;
         enemy.gridChords = ClampPoint(GetTile(numColumns - 1, numRows - 1).gridChords);
         enemy.dir = 180;

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
 public class TileObjBase : MonoBehaviour
 {
@@ -9,11 +7,14 @@ public class TileObjBase : MonoBehaviour
     public GridManager gridManager;
     public Vector2Int gridChords;
 
+    public float moveDuration;
+    public Ease ease;
     public int dir = 0;
 
     private void Start()
     {
         dirVector = new Vector2Int((int)Mathf.Cos(dir * Mathf.Deg2Rad), (int)Mathf.Sin(dir * Mathf.Deg2Rad));
+        transform.localRotation = Quaternion.Euler(0, 0, dir);
     }
 
     private void Update()
@@ -23,10 +24,7 @@ public class TileObjBase : MonoBehaviour
             dir -= 360;
         }
 
-        float t = 7 * Time.deltaTime;
-
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0, 0, dir), t);
-        transform.localPosition = Vector2.Lerp(transform.localPosition, gridManager.GetTile(gridChords.x, gridChords.y).transform.localPosition, t);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0, 0, dir), 7 * Time.deltaTime);
     }
 
     public void Move(int spaces)
@@ -34,6 +32,7 @@ public class TileObjBase : MonoBehaviour
         Vector2Int pos = TrySpace(spaces);
 
         gridChords = gridManager.ClampPoint(pos);
+        transform.DOMove(gridManager.GetTile(gridChords.x, gridChords.y).transform.position, moveDuration).SetEase(ease);
     }
     Vector2Int TrySpace(int spaces)
     {

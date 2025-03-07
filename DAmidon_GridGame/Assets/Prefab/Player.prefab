@@ -103,6 +103,8 @@ MonoBehaviour:
   dirVector: {x: 0, y: 0}
   gridManager: {fileID: 0}
   gridChords: {x: 0, y: 0}
+  moveDuration: 1
+  ease: 28
   dir: 0
   explosionPrefab: {fileID: 4922537819870933953, guid: 36444e59249f91f468e409ecada38418, type: 3}
   muzzle: {fileID: 1098753346346620135}
@@ -118,6 +120,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825b5d8646612de498349cb060bebf7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
+  dead: 0
 --- !u!61 &7885854657224061151
 BoxCollider2D:
   m_ObjectHideFlags: 0
