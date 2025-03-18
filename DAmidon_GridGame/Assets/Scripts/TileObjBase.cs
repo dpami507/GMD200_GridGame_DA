@@ -37,6 +37,7 @@ public class TileObjBase : MonoBehaviour
     Vector2Int TrySpace(int spaces)
     {
         Vector2Int pos = gridChords + (dirVector * spaces);
+        pos = gridManager.ClampPoint(pos);
 
         if (gridManager.enemy.gridChords == pos || gridManager.player.gridChords == pos)
             pos = TrySpace(spaces - 1);
