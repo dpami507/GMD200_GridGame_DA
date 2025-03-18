@@ -114,7 +114,9 @@ public class CardHolder : MonoBehaviour
     public void AddRandomCards(List<CardScript> selected, List<CardScript> hand, Transform parent, bool visable)
     {
         int numCardsToAdd = maxCards - (selected.Count + hand.Count);
-        
+
+        Debug.Log($"Adding {numCardsToAdd} Cards");
+
         if(numCardsToAdd > 0)
         {
             for (int i = 0; i < numCardsToAdd; i++)
@@ -184,6 +186,7 @@ public class CardHolder : MonoBehaviour
     {
         //Create new Array to counteract the cleanup
         CardScript[] cardsToDelete = cards.ToArray();
+        cards.Clear();
 
         //loop through and destroy them
         for (int i = 0; i < cardsToDelete.Length; i++)

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,12 +11,18 @@ public class GameManager : MonoBehaviour
     public bool setUp;
     public bool inPlay;
     public CardHolder cardHolder;
+    public GameObject[] heartsPlayer;
+    PlayerScript player;
 
     [Header("Enemy")]
-    public GameObject[] hearts;
+    public GameObject[] heartsEnemy;
     EnemyAI enemyAI;
 
     public static GameManager instance;
+    public GameObject endScreen;
+    public TMP_Text winStateText;
+    public string gameScene;
+    public string menuScene;
 
     private void Awake()
     {
@@ -25,13 +33,26 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        endScreen.SetActive(false);
         enemyAI = GridManager.instance.enemy.GetComponent<EnemyAI>();
+        player = GridManager.instance.player;
     }
 
     private void Update()
     {
-        SetHearts(enemyAI.GetComponent<Health>().health);
-        if (!inPlay) return;
+        SetHearts(player.GetComponent<Health>().health, heartsPlayer);
+        SetHearts(enemyAI.GetComponent<Health>().health, heartsEnemy);
+        if (!inPlay)
+        {
+            if(!endScreen.activeInHierarchy)
+                endScreen.SetActive(true);
+
+            if (player.GetComponent<Health>().dead)
+                winStateText.text = "Game Over";
+            else
+                winStateText.text = "You Win!";
+            return;
+        }
 
         if (isPlayersTurn && !setUp)
         {
@@ -45,7 +66,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SetHearts(int heartsActive)
+    void SetHearts(int heartsActive, GameObject[] hearts)
     {
         for (int i = 0; i < hearts.Length; i++)
         {
@@ -60,5 +81,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("Ending Turn");
         isPlayersTurn = isTurn;
         setUp = false;
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene(gameScene);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(menuScene);
     }
 }
