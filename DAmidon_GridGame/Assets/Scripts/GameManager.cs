@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     public string gameScene;
     public string menuScene;
 
+    public GameObject EnemyTurnIndicator;
+    public GameObject PlayerTurnIndicator;
+
     private void Awake()
     {
         instance = this;
@@ -33,6 +36,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        EnemyTurnIndicator.SetActive(false);
+        PlayerTurnIndicator.SetActive(false);
+
         endScreen.SetActive(false);
         enemyAI = GridManager.instance.enemy.GetComponent<EnemyAI>();
         player = GridManager.instance.player;
@@ -56,11 +62,15 @@ public class GameManager : MonoBehaviour
 
         if (isPlayersTurn && !setUp)
         {
+            EnemyTurnIndicator.SetActive(false);
+            PlayerTurnIndicator.SetActive(true);
             setUp = true;
             cardHolder.StartTurn();
         }
         else if (!isPlayersTurn && !setUp)
         {
+            EnemyTurnIndicator.SetActive(true);
+            PlayerTurnIndicator.SetActive(false);
             setUp = true;
             enemyAI.StartTurn();
         }
