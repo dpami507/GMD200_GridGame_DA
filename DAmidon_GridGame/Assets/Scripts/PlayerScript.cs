@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class PlayerScript : TileObjBase
 {
-    public GameObject explosionPrefab;
+    [SerializeField] GameObject explosionPrefab;
     [SerializeField] Transform muzzle;
-    Health health;
-
-    private void Awake()
-    {
-        health = GetComponent<Health>();
-    }
 
     public override void Fire()
     {

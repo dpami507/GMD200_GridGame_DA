@@ -7,8 +7,8 @@ public class TileObjBase : MonoBehaviour
     public GridManager gridManager;
     public Vector2Int gridChords;
 
-    public float moveDuration;
-    public Ease ease;
+    [SerializeField] float moveDuration;
+    [SerializeField] Ease ease;
     public int dir = 0;
 
     private void Start()

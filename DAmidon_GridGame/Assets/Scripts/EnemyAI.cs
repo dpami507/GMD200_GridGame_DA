@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    public CardHolder cardHolder;
-    public GridManager gridManager;
-    public CardList possibleCards;
+    [SerializeField] CardHolder cardHolder;
+    [SerializeField] GridManager gridManager;
+    [SerializeField] CardList possibleCards;
 
-    public List<CardScript> handCards;
-    public List<CardScript> selectedCards;
+    [SerializeField] List<CardScript> handCards;
+    [SerializeField] List<CardScript> selectedCards;
 
-    public PlayerScript player;
-    public TileObjBase thisObj;
+    [SerializeField] PlayerScript player;
+    [SerializeField] TileObjBase thisObj;
 
     bool running;
 

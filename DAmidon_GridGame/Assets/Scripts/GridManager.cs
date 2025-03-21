@@ -5,22 +5,22 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public int numRows;
-    public int numColumns;
+    [SerializeField] int numRows;
+    [SerializeField] int numColumns;
 
-    public float padding;
+    [SerializeField] float padding;
     public float squareSize;
 
     public Vector2 gridOffset;
-    public Transform tilesParent;
+    [SerializeField] Transform tilesParent;
 
     [SerializeField] GridTile tilePrefab;
-    public List<GridTile> tiles;
+    [SerializeField] List<GridTile> tiles;
 
-    public GameObject playerPrefab;
+    [SerializeField] GameObject playerPrefab;
     [HideInInspector] public PlayerScript player;
 
-    public GameObject enemyPrefab;
+    [SerializeField] GameObject enemyPrefab;
     [HideInInspector] public EnemyScript enemy;
 
     public static GridManager instance;

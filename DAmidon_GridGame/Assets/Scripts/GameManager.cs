@@ -8,24 +8,24 @@ public class GameManager : MonoBehaviour
 {
     [Header("Player")]
     public bool isPlayersTurn;
-    public bool setUp;
+    [SerializeField] bool setUp;
     public bool inPlay;
-    public CardHolder cardHolder;
-    public GameObject[] heartsPlayer;
+    [SerializeField] CardHolder cardHolder;
+    [SerializeField] GameObject[] heartsPlayer;
     PlayerScript player;
 
     [Header("Enemy")]
-    public GameObject[] heartsEnemy;
+    [SerializeField] GameObject[] heartsEnemy;
     EnemyAI enemyAI;
 
     public static GameManager instance;
-    public GameObject endScreen;
-    public TMP_Text winStateText;
-    public string gameScene;
-    public string menuScene;
+    [SerializeField] GameObject endScreen;
+    [SerializeField] TMP_Text winStateText;
+    [SerializeField] string gameScene;
+    [SerializeField] string menuScene;
 
-    public GameObject EnemyTurnIndicator;
-    public GameObject PlayerTurnIndicator;
+    [SerializeField] GameObject EnemyTurnIndicator;
+    [SerializeField] GameObject PlayerTurnIndicator;
 
     private void Awake()
     {

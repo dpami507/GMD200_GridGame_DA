@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
 
     private void Update()
     {
+        //Death check
         if(health <= 0)
             dead = true;
         else dead = false;

@@ -5,25 +5,25 @@ using UnityEngine;
 public class CardHolder : MonoBehaviour
 {
     [Header("Card Lists")]
-    public List<CardScript> cards;
+    [SerializeField] List<CardScript> cards;
     public List<CardScript> selectedCards;
 
     [Header("Cards Setup")]
-    public CardList possibleCards;
-    public GameObject cardOutline;
-    public int maxCards;
+    [SerializeField] CardList possibleCards;
+    [SerializeField] GameObject cardOutline;
+    [SerializeField] int maxCards;
 
     [Header("Cards Positioning")]
-    public Transform handTrans;
-    public Transform selectedTrans;
-    public float cardSpacing;
-    public float hoverHeight;
-    public float cardMoveSpeed;
+    [SerializeField] Transform handTrans;
+    [SerializeField] Transform selectedTrans;
+    [SerializeField] float cardSpacing;
+    [SerializeField] float hoverHeight;
+    [SerializeField] float cardMoveSpeed;
 
     [Header("Cards Running")]
-    public Transform indicatorArrow;
-    public float indicatorYOffset;
-    public float indicatorSpeed;
+    [SerializeField] Transform indicatorArrow;
+    [SerializeField] float indicatorYOffset;
+    [SerializeField] float indicatorSpeed;
     Vector2 indicatorPos;
 
     public bool running;

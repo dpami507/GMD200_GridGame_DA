@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Main_CanvasManager : MonoBehaviour
 {
-    public string gameScene;
-    public GameObject howToPlay;
+    [SerializeField] string gameScene;
+    [SerializeField] GameObject howToPlay;
 
     private void Start()
     {

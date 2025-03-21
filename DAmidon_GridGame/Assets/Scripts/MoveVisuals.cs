@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MoveVisuals : MonoBehaviour
 {
-    public CardHolder cardHolder;
+    [SerializeField] CardHolder cardHolder;
     GridManager gridManager;
-    public List<GameObject> points;
-    public GameObject point;
-    public Transform pointsParent;
+    [SerializeField] List<GameObject> points;
+    [SerializeField] GameObject point;
+    [SerializeField] Transform pointsParent;
 
-    public TileObjBase ghostPlayer;
+    [SerializeField] TileObjBase ghostPlayer;
 
     int lastFutureSelectedCards;
     LineRenderer lr;
@@ -24,6 +24,7 @@ public class MoveVisuals : MonoBehaviour
 
     private void Update()
     {
+        //Show future pos if cards are not running
         if (!cardHolder.running)
         {
             if(lastFutureSelectedCards != cardHolder.selectedCards.Count)
@@ -33,6 +34,7 @@ public class MoveVisuals : MonoBehaviour
             lr.SetPosition(cardHolder.selectedCards.Count, RoundVector(ghostPlayer.transform.position)); //Set last pos
         }
 
+        //Set invisible if no cards are being played
         if(cardHolder.selectedCards.Count == 0)
         {
             ghostPlayer.transform.position = gridManager.player.transform.position;
